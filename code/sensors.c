@@ -24,3 +24,29 @@
 
 //////////////////////////////////////////////////
 #endif
+
+int main( void ) {
+	int gyroval;
+	uint8_t sn_gyro;
+	//Initialize ev3 and check if it is online
+	if ( ev3_init() < 1 ) return ( 1 );
+	//Initialize the sensors
+	ev3_sensor_init();
+	//Check if the sensor is connected or not
+	if ( ev3_search_sensor( LEGO_EV3_GYRO, &sn_gyro, 0 )) {
+		printf( "Gyro sensor is found\n" );
+		set_sensor_mode( sn_gyro, "LEGO_EV3_GYRO_GYRO_G_AND_A" );
+		for ( ; ; ) {
+			//save the sensor value to the variable gyroval
+			if ( !get_sensor_value( 0, sn_gyro, &gyroval )) {
+				val = 0;
+			}
+			//print the value to the screen
+			printf( "\r(%d)", gyroval);
+			fflush( stdout );
+		}
+	} else {
+		printf( "Gyro sensor is NOT found\n" );
+	}
+	return ( 0 );
+}
