@@ -27,6 +27,7 @@
 
 int main( void ) {
 	int gyroval;
+	int val;
 	uint8_t sn_gyro;
 	//Initialize ev3 and check if it is online
 	if ( ev3_init() < 1 ) return ( 1 );
