@@ -26,7 +26,7 @@
 #endif
 
 int main( void ) {
-	int gyroval;
+	/* int gyroval;
 	int val;
 	uint8_t sn_gyro;
 	//Initialize ev3 and check if it is online
@@ -50,4 +50,30 @@ int main( void ) {
 		printf( "Gyro sensor is NOT found\n" );
 	}
 	return ( 0 );
+	*/
+	
+	//Initialize ev3 and check if it is online
+	if ( ev3_init() < 1 ) return ( 1 );
+	//Initialize the sensors
+	ev3_sensor_init();
+	//Get the sensor value and print it to the screen
+	printf("%d", getGyroVal());
+	return (0);
+}
+
+//Get the value of the gyroscope. The sensor needs to be initialized before using this function.
+int getGyroVal(void){
+	int gyroval;
+	int val;
+	uint8_t sn_gyro;
+	//Check if the sensor is connected or not
+	if ( ev3_search_sensor( LEGO_EV3_GYRO, &sn_gyro, 0 )) {
+		set_sensor_mode( sn_gyro, "LEGO_EV3_GYRO_GYRO_G_AND_A" );
+		//save the sensor value to the variable gyroval
+		if ( !get_sensor_value( 0, sn_gyro, &gyroval )) {
+			val = 0;
+		}
+		return gyroval;
+	}
+	return 0;
 }
