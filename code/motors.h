@@ -99,6 +99,13 @@ void rotate(direction_type direction, int time){
 	
 }
 
+int degreeRotate(direction_type direction, int degree){
+	if()
+	while(getGyroVal() < 90){
+		rotate(RIGHT, 80);
+	}
+}
+
 void movePen(direction_type direction){
 	uint8_t sn;
 	int speed_tacho;
@@ -129,19 +136,4 @@ void movePen(direction_type direction){
 	} else {
 		printf( "The medium motor is not connected.\n" );
 	}
-}
-
-int main( void )
-{
-	//check if the functions work properly
-	if ( !brick_init()) return ( 1 );
-	if(init()){
-		// movePen(DOWN);
-		// Sleep( 2000 );
-		// movePen(UP);
-		// rotate(LEFT, 1000);
-		// rotate(RIGHT, 1000);
-	}
-	brick_uninit();
-	return ( 0 );
 }
