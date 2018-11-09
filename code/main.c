@@ -9,7 +9,6 @@
 #include "brick.h"
 #include "ev3_tacho.h"
 #include "motors.h"
-#include "sensors.h"
 #include "ev3.h"
 #include "ev3_port.h"
 #include "ev3_sensor.h"
@@ -36,9 +35,8 @@ int main( void )
 	if ( ev3_init() < 1 ) return ( 1 );
 	if(init() && ev3_sensor_init()){
 		
-		while(getGyroVal() < 90){
-			rotate(RIGHT, 80);
-		}
+		rotateDegree(LEFT, 90);
+		rotateDegree(RIGHT, 180);
 		printf("%d\n", getGyroVal());
 	}
 	brick_uninit();

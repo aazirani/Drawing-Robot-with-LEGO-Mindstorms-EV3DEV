@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include "brick.h"
 #include "ev3_tacho.h"
+#include "sensors.h"
 
 // WIN32 /////////////////////////////////////////
 #ifdef __WIN32__
@@ -99,13 +100,6 @@ void rotate(direction_type direction, int time){
 	
 }
 
-int degreeRotate(direction_type direction, int degree){
-	if()
-	while(getGyroVal() < 90){
-		rotate(RIGHT, 80);
-	}
-}
-
 void movePen(direction_type direction){
 	uint8_t sn;
 	int speed_tacho;
@@ -136,4 +130,21 @@ void movePen(direction_type direction){
 	} else {
 		printf( "The medium motor is not connected.\n" );
 	}
+}
+
+//rotate the robot for "degree" degrees in the given direction
+int rotateDegree(direction_type direction, int degree){
+	int currentDegree;
+	//save the current degree
+	currentDegree = getGyroVal();
+	if (direction == LEFT) {
+		while(getGyroVal() >= (currentDegree - degree)){
+			rotate(LEFT, 80);
+		}
+	} else if (direction == RIGHT) {
+		while(getGyroVal() <= (currentDegree + degree)){
+			rotate(RIGHT, 80);
+		}
+	}
+	return getGyroVal();
 }
