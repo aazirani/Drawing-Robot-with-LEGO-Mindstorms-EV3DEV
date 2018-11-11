@@ -24,7 +24,7 @@
 //////////////////////////////////////////////////
 #endif
 
-#define SPEED_LINEAR    10  /* Motor speed to move backward and forward, in percents */
+#define SPEED_LINEAR    4  /* Motor speed to move backward and forward, in percents */
 #define SPEED_CIRCULAR  10  /* ... for rotation */
 #define SPEED_TACHO  10  /* ... for holder */
 
@@ -67,6 +67,8 @@ void move(direction_type direction, int time){
 		//if the input value is wrong, do nothing
 		return;
 	}
+	//make the motor stop as soon as the movement ends
+	tacho_set_stop_action(MOTOR_BOTH, TACHO_HOLD);
 	//start the motors
 	tacho_run_forever( MOTOR_BOTH );
 	//run for "time" milliseconds
@@ -91,6 +93,8 @@ void rotate(direction_type direction, int time){
 		//if the input value is wrong, do nothing
 		return;
 	}
+	//make the motor brake as soon as the movement ends
+	tacho_set_stop_action(MOTOR_BOTH, TACHO_BRAKE);
 	//start the motors
 	tacho_run_forever( MOTOR_BOTH );
 	//run for "time" milliseconds
@@ -138,13 +142,52 @@ int rotateDegree(direction_type direction, int degree){
 	//save the current degree
 	currentDegree = getGyroVal();
 	if (direction == LEFT) {
-		while(getGyroVal() >= (currentDegree - degree)){
-			rotate(LEFT, 80);
+		//calculate the target degree
+		int summedUpDegree = (currentDegree + degree);
+		//fix the issue of a degree greater than 360
+		while (summedUpDegree >=360){
+			summedUpDegree = summedUpDegree - 360;
+		}
+		//rotate to the left until the correct degree is found
+		while(getGyroVal() != summedUpDegree){
+			//4 different rotation speeds in order to be accurate and fast at the same time. If the target degree is farther away, the rotation is faster.
+			if( abs(summedUpDegree-getGyroVal()) >= 20 ){
+				rotate(LEFT, 300);
+			} else if( abs(summedUpDegree-getGyroVal()) >= 10 ){
+				rotate(LEFT, 100);
+			} else if( abs(summedUpDegree-getGyroVal()) >= 3 ){
+				rotate(LEFT, 60);
+			} else {
+				rotate(LEFT, 40);
+			}
 		}
 	} else if (direction == RIGHT) {
-		while(getGyroVal() <= (currentDegree + degree)){
-			rotate(RIGHT, 80);
+		//calculate the target degree
+		int differenceDegree = (currentDegree - degree);
+		//fix the issue of a degree less than 0
+		while (differenceDegree < 0){
+			differenceDegree = differenceDegree + 360;
+		}
+		//rotate to the right until the correct degree is found
+		while(getGyroVal() != differenceDegree){
+			//4 different rotation speeds in order to be accurate and fast at the same time. If the target degree is farther away, the rotation is faster.
+			if( abs(getGyroVal()-differenceDegree) >= 20 ){
+				rotate(RIGHT, 300);
+			} else if( abs(getGyroVal()-differenceDegree) >= 10 ){
+				rotate(RIGHT, 100);
+			} else if( abs(getGyroVal()-differenceDegree) >= 3 ){
+				rotate(RIGHT, 60);
+			} else {
+				rotate(RIGHT, 40);
+			}
 		}
 	}
+	//return the final degree when rotation terminates
 	return getGyroVal();
+}
+
+//move the robot for the specified distance. This accepts 1 centimeter as minimum movement.
+void moveDistance(direction_type direction, float distance){
+	//after conducting careful tests, based on the speed of 4% of the maximum motor speed, a centimeter takes 400 milliseconds.
+	move(direction, round(400*distance));
 }

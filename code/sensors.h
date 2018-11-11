@@ -32,11 +32,21 @@ int getGyroVal(void){
 	uint8_t sn_gyro;
 	//Check if the sensor is connected or not
 	if ( ev3_search_sensor( LEGO_EV3_GYRO, &sn_gyro, 0 )) {
-		set_sensor_mode( sn_gyro, "LEGO_EV3_GYRO_GYRO_G_AND_A" );
+		set_sensor_mode( sn_gyro, "LEGO_EV3_GYRO_GYRO_ANG" );
 		//save the sensor value to the variable gyroval
 		if ( !get_sensor_value( 0, sn_gyro, &gyroval )) {
-			val = 0;
+			gyroval = 0;
 		}
+		//the gyroscope delivers negative values for rotation to the left. Counter this by multiplying it with -1
+		gyroval = gyroval * (-1);
+		//calculate the current degree based on 360 degrees maximum.
+		while(gyroval < 0){
+			gyroval = gyroval + 360;
+		}
+		while(gyroval >= 360){
+			gyroval = gyroval - 360;
+		}
+		//return the calculated gyroscope degree
 		return gyroval;
 	}
 	return 0;
