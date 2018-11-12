@@ -26,7 +26,7 @@
 
 #define SPEED_LINEAR    4  /* Motor speed to move backward and forward, in percents */
 #define SPEED_CIRCULAR  10  /* ... for rotation */
-#define SPEED_TACHO  10  /* ... for holder */
+#define SPEED_TACHO  5  /* ... for holder */
 
 int max_speed;         /* Motor maximal speed (will be detected) */
 
@@ -117,10 +117,10 @@ void movePen(direction_type direction){
 		set_tacho_stop_action_inx( sn, TACHO_BRAKE);
 		//set the speed
 		set_tacho_speed_sp( sn, speed_tacho);
-		if(direction == DOWN){
+		if(direction == UP){
 			//set the the holder to move up
 			set_tacho_polarity_inx(sn, TACHO_NORMAL);
-		} else if(direction == UP){
+		} else if(direction == DOWN){
 			//set the holder to move down
 			set_tacho_polarity_inx(sn, TACHO_INVERSED);
 		} else {
@@ -128,7 +128,7 @@ void movePen(direction_type direction){
 			return;
 		}
 		//move the holder for 1000 milliseconds
-		set_tacho_time_sp( sn, 1000 );
+		set_tacho_time_sp( sn, 500 );
 		//move the holder
 		set_tacho_command_inx( sn, TACHO_RUN_TIMED );
 	} else {

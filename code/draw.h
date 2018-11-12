@@ -460,6 +460,8 @@ void moveToCoordinate(int currentX, int currentY, int destinationX, int destinat
 void draw(node* allCoordinates){
 	int processedCoordinates = 0;
 	//0 for pen up an 1 for pen down
+	movePen(DOWN);
+	movePen(UP);
 	int isPenDown = 0;
 	//save the to be processed coordinates
 	node* previousCoordinate = allCoordinates;
