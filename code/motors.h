@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include "brick.h"
 #include "ev3_tacho.h"
+#include "sensors.h"
 
 // WIN32 /////////////////////////////////////////
 #ifdef __WIN32__
@@ -23,9 +24,9 @@
 //////////////////////////////////////////////////
 #endif
 
-#define SPEED_LINEAR    10  /* Motor speed to move backward and forward, in percents */
+#define SPEED_LINEAR    4  /* Motor speed to move backward and forward, in percents */
 #define SPEED_CIRCULAR  10  /* ... for rotation */
-#define SPEED_TACHO  10  /* ... for holder */
+#define SPEED_TACHO  5  /* ... for holder */
 
 int max_speed;         /* Motor maximal speed (will be detected) */
 
@@ -66,6 +67,8 @@ void move(direction_type direction, int time){
 		//if the input value is wrong, do nothing
 		return;
 	}
+	//make the motor stop as soon as the movement ends
+	tacho_set_stop_action(MOTOR_BOTH, TACHO_HOLD);
 	//start the motors
 	tacho_run_forever( MOTOR_BOTH );
 	//run for "time" milliseconds
@@ -90,6 +93,8 @@ void rotate(direction_type direction, int time){
 		//if the input value is wrong, do nothing
 		return;
 	}
+	//make the motor brake as soon as the movement ends
+	tacho_set_stop_action(MOTOR_BOTH, TACHO_BRAKE);
 	//start the motors
 	tacho_run_forever( MOTOR_BOTH );
 	//run for "time" milliseconds
@@ -112,10 +117,10 @@ void movePen(direction_type direction){
 		set_tacho_stop_action_inx( sn, TACHO_BRAKE);
 		//set the speed
 		set_tacho_speed_sp( sn, speed_tacho);
-		if(direction == DOWN){
+		if(direction == UP){
 			//set the the holder to move up
 			set_tacho_polarity_inx(sn, TACHO_NORMAL);
-		} else if(direction == UP){
+		} else if(direction == DOWN){
 			//set the holder to move down
 			set_tacho_polarity_inx(sn, TACHO_INVERSED);
 		} else {
@@ -123,7 +128,7 @@ void movePen(direction_type direction){
 			return;
 		}
 		//move the holder for 1000 milliseconds
-		set_tacho_time_sp( sn, 1000 );
+		set_tacho_time_sp( sn, 500 );
 		//move the holder
 		set_tacho_command_inx( sn, TACHO_RUN_TIMED );
 	} else {
@@ -131,17 +136,81 @@ void movePen(direction_type direction){
 	}
 }
 
-int main( void )
-{
-	//check if the functions work properly
-	if ( !brick_init()) return ( 1 );
-	if(init()){
-		// movePen(DOWN);
-		// Sleep( 2000 );
-		// movePen(UP);
-		// rotate(LEFT, 1000);
-		// rotate(RIGHT, 1000);
+//rotate the robot for "degree" degrees in the given direction
+int rotateDegree(direction_type direction, int degree){
+	int currentDegree;
+	//save the current degree
+	currentDegree = getGyroVal();
+	if (direction == LEFT) {
+		//calculate the target degree
+		int summedUpDegree = (currentDegree + degree);
+		//fix the issue of a degree greater than 360
+		while (summedUpDegree >=360){
+			summedUpDegree = summedUpDegree - 360;
+		}
+		printf("summedUpDegree: %d\n", summedUpDegree);
+		//do not execute the command if the target degree is the same
+		if(summedUpDegree == currentDegree){
+			return currentDegree;
+		}
+		//rotate to the left until the correct degree is found
+		while(getGyroVal() != summedUpDegree){
+			int tempDegree = getGyroVal();
+			int counter360Problem = summedUpDegree;
+			if(summedUpDegree == 0){
+				summedUpDegree = 360;
+			}
+			//4 different rotation speeds in order to be accurate and fast at the same time. If the target degree is farther away, the rotation is faster.
+			printf("tempDegree: %d\n", tempDegree);
+			if( abs(summedUpDegree-tempDegree) >= 20 ){
+				rotate(LEFT, 300);
+			} else if( abs(summedUpDegree-tempDegree) >= 10 ){
+				rotate(LEFT, 100);
+			} else if( abs(summedUpDegree-tempDegree) >= 3 ){
+				rotate(LEFT, 60);
+			} else {
+				rotate(LEFT, 40);
+			}
+			if(counter360Problem == 0){
+				summedUpDegree = 0;
+			}
+		}
+	} else if (direction == RIGHT) {
+		//calculate the target degree
+		int differenceDegree = (currentDegree - degree);
+		//fix the issue of a degree less than 0
+		while (differenceDegree < 0){
+			differenceDegree = differenceDegree + 360;
+		}
+		printf("differenceDegree: %d\n", differenceDegree);
+		//do not execute the command if the target degree is the same
+		if(differenceDegree == currentDegree){
+			return currentDegree;
+		}
+		//rotate to the right until the correct degree is found
+		while(getGyroVal() != differenceDegree){
+			int tempDegree = getGyroVal();
+			//4 different rotation speeds in order to be accurate and fast at the same time. If the target degree is farther away, the rotation is faster.
+			printf("tempDegree: %d\n", tempDegree);
+			if( abs(tempDegree-differenceDegree) >= 20 ){
+				rotate(RIGHT, 300);
+			} else if( abs(tempDegree-differenceDegree) >= 10 ){
+				rotate(RIGHT, 100);
+			} else if( abs(tempDegree-differenceDegree) >= 3 ){
+				rotate(RIGHT, 60);
+			} else {
+				rotate(RIGHT, 40);
+			}
+		}
 	}
-	brick_uninit();
-	return ( 0 );
+	//return the final degree when rotation terminates
+	return getGyroVal();
+}
+
+//move the robot for the specified distance. This accepts 1 centimeter as minimum movement.
+void moveDistance(direction_type direction, float distance){
+	//after conducting careful tests, based on the speed of 4% of the maximum motor speed, a centimeter takes 400 milliseconds.
+	//move(direction, round(400*distance));
+	//since the process of drawing is proportional to this function, the speed can be choosen freely.
+	move(direction, round(200*distance));
 }
