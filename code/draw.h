@@ -466,7 +466,7 @@ void draw(node* allCoordinates){
 	//save the to be processed coordinates
 	node* previousCoordinate = allCoordinates;
 	node* currentCoordinate = allCoordinates;
-	while(currentCoordinate->next != NULL){
+	while(currentCoordinate != NULL){
 		//If we have just started drawing
 		if(processedCoordinates == 0){
 			//navigate to the first coordinate

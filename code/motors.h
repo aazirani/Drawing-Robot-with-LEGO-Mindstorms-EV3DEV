@@ -26,7 +26,7 @@
 
 #define SPEED_LINEAR    4  /* Motor speed to move backward and forward, in percents */
 #define SPEED_CIRCULAR  10  /* ... for rotation */
-#define SPEED_TACHO  5  /* ... for holder */
+#define SPEED_TACHO  10  /* ... for holder */
 
 int max_speed;         /* Motor maximal speed (will be detected) */
 
@@ -148,7 +148,7 @@ int rotateDegree(direction_type direction, int degree){
 		while (summedUpDegree >=360){
 			summedUpDegree = summedUpDegree - 360;
 		}
-		printf("summedUpDegree: %d\n", summedUpDegree);
+		//printf("summedUpDegree: %d\n", summedUpDegree);
 		//do not execute the command if the target degree is the same
 		if(summedUpDegree == currentDegree){
 			return currentDegree;
@@ -161,12 +161,12 @@ int rotateDegree(direction_type direction, int degree){
 				summedUpDegree = 360;
 			}
 			//4 different rotation speeds in order to be accurate and fast at the same time. If the target degree is farther away, the rotation is faster.
-			printf("tempDegree: %d\n", tempDegree);
-			if( abs(summedUpDegree-tempDegree) >= 20 ){
+			//printf("tempDegree: %d\n", tempDegree);
+			if( mod((summedUpDegree-tempDegree), 360) >= 20 ){
 				rotate(LEFT, 300);
-			} else if( abs(summedUpDegree-tempDegree) >= 10 ){
+			} else if( mod((summedUpDegree-tempDegree), 360) >= 10 ){
 				rotate(LEFT, 100);
-			} else if( abs(summedUpDegree-tempDegree) >= 3 ){
+			} else if( mod((summedUpDegree-tempDegree), 360) >= 3 ){
 				rotate(LEFT, 60);
 			} else {
 				rotate(LEFT, 40);
@@ -182,7 +182,7 @@ int rotateDegree(direction_type direction, int degree){
 		while (differenceDegree < 0){
 			differenceDegree = differenceDegree + 360;
 		}
-		printf("differenceDegree: %d\n", differenceDegree);
+		//printf("differenceDegree: %d\n", differenceDegree);
 		//do not execute the command if the target degree is the same
 		if(differenceDegree == currentDegree){
 			return currentDegree;
@@ -191,12 +191,12 @@ int rotateDegree(direction_type direction, int degree){
 		while(getGyroVal() != differenceDegree){
 			int tempDegree = getGyroVal();
 			//4 different rotation speeds in order to be accurate and fast at the same time. If the target degree is farther away, the rotation is faster.
-			printf("tempDegree: %d\n", tempDegree);
-			if( abs(tempDegree-differenceDegree) >= 20 ){
+			//printf("tempDegree: %d\n", tempDegree);
+			if( mod((tempDegree-differenceDegree), 360) >= 20 ){
 				rotate(RIGHT, 300);
-			} else if( abs(tempDegree-differenceDegree) >= 10 ){
+			} else if( mod((tempDegree-differenceDegree), 360) >= 10 ){
 				rotate(RIGHT, 100);
-			} else if( abs(tempDegree-differenceDegree) >= 3 ){
+			} else if( mod((tempDegree-differenceDegree), 360) >= 3 ){
 				rotate(RIGHT, 60);
 			} else {
 				rotate(RIGHT, 40);
@@ -212,5 +212,11 @@ void moveDistance(direction_type direction, float distance){
 	//after conducting careful tests, based on the speed of 4% of the maximum motor speed, a centimeter takes 400 milliseconds.
 	//move(direction, round(400*distance));
 	//since the process of drawing is proportional to this function, the speed can be choosen freely.
-	move(direction, round(200*distance));
+	move(direction, round(300*distance));
+}
+//calculate modulo
+int mod(int a, int b)
+{
+    int r = a % b;
+    return r < 0 ? r + b : r;
 }
