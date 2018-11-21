@@ -164,14 +164,13 @@ int rotateDegree(direction_type direction, int degree){
 			printf("tempDegree: %d\n", tempDegree);
 			printf("modLEFT: %d\n", mod((summedUpDegree-tempDegree), 360));
 			if( mod((summedUpDegree-tempDegree), 360) >= 20 ){
-				rotate(LEFT, 300);
+				rotate(LEFT, 250);
 			} else if( mod((summedUpDegree-tempDegree), 360) >= 10 ){
 				rotate(LEFT, 100);
-			} else if( mod((summedUpDegree-tempDegree), 360) >= 3 ){
-				rotate(LEFT, 40);
+			} else if( mod((summedUpDegree-tempDegree), 360) >= 5 ){
+				rotate(LEFT, 50);
 			} else {
-				rotate(LEFT, 30);
-				Sleep(30);
+				rotate(LEFT, 40);
 			}
 			if(counter360Problem == 0){
 				summedUpDegree = 0;
@@ -196,14 +195,13 @@ int rotateDegree(direction_type direction, int degree){
 			printf("tempDegree: %d\n", tempDegree);
 			printf("modRIGHT: %d\n", mod((tempDegree-differenceDegree), 360));
 			if( mod((tempDegree-differenceDegree), 360) >= 20 ){
-				rotate(RIGHT, 300);
+				rotate(RIGHT, 250);
 			} else if( mod((tempDegree-differenceDegree), 360) >= 10 ){
 				rotate(RIGHT, 100);
-			} else if( mod((tempDegree-differenceDegree), 360) >= 3 ){
-				rotate(RIGHT, 40);
+			} else if( mod((tempDegree-differenceDegree), 360) >= 5 ){
+				rotate(RIGHT, 50);
 			} else {
-				rotate(RIGHT, 30);
-				Sleep(30);
+				rotate(RIGHT, 40);
 			}
 		}
 	}
