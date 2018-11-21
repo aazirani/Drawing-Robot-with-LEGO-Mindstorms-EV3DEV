@@ -493,5 +493,13 @@ void draw(node* allCoordinates){
 		//go to next coordinate
 		currentCoordinate = currentCoordinate->next;
 	}
+	//move the pen up when the drawing finishes
+	if(isPenDown){
+		movePen(UP);
+		isPenDown = 0;
+	}
+	//go to the point (0,0) and terminate the drawing process
+	node* lastPoint = remove_back(allCoordinates);
+	moveToCoordinate(lastPoint->x, lastPoint->y, 0, 0, getGyroVal());
 }
 
