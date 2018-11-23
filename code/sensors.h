@@ -51,3 +51,18 @@ int getGyroVal(void){
 	}
 	return 0;
 }
+
+
+int get_color(){
+	int color; // 1 == BLACK, 6 == WHITE, 0 == NO COLOR
+	uint8_t sn_color;
+
+    if(ev3_search_sensor(LEGO_EV3_COLOR, &sn_color, 0)){
+		set_sensor_mode(sn_color, "LEGO_EV3_COLOR_COL_COLOR");
+		while(!get_sensor_value(0,sn_color, &color) || color < 0 || color > 7){
+			//index= 2;   / / index is set to "UNKOWN" since index couldn´t be determined correctly
+		}
+		return color;
+	}	
+	return 0; 
+}
