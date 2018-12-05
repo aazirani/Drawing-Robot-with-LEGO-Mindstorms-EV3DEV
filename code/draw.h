@@ -24,59 +24,6 @@
 //////////////////////////////////////////////////
 #endif
 
-// struct Node{
-// 	int x;
-// 	int y;
-// 	struct Node *next;
-// };
-//
-// typedef struct Node Node;
-//
-// Node* makeNode(int x, int y,Node* next){
-// 	Node* node = malloc(sizeof(Node));
-// 	node->x=x;
-// 	node->y=y;
-// 	node->next=next;
-//
-// 	return node;
-// }
-//
-// Node* appendList(Node* node, int x, int y){
-// 	if(node == NULL)
-// 		return makeNode(x, y, NULL);
-// 	Node* temp;
-// 	while(temp->next != NULL)
-// 		temp=temp->next;
-// 	temp->next = makeNode(x, y, NULL);
-// 	return node;
-// }
-//
-// Node* readFile(){
-// 	int y;
-// 	int x;
-// 	FILE *fptr;
-// 	Node* n;
-// 	if((fptr = fopen("C:\\Users\\Semir\\Desktop\\coordinates.txt", "r")) == NULL){
-// 		printf("Error! Opening file.\n");
-//
-// 		exit(1);
-// 	}
-//
-// 	while(fscanf(fptr, "%d %d", &x, &y) == 2){
-// 		n= appendList(n, x, y);
-// 		//fscanf(fptr, "%d %d" &x, &y);
-// 	}
-// 	fclose(fptr);
-// 	return n;
-// }
-//
-// int main(void){
-// 	Node* n = NULL;
-// 	n = readFile();
-// 	printf("%d %d\n", n->x, n->y);
-// 	return 0;
-// }
-
 typedef struct node
 {
     int x;

@@ -1,6 +1,8 @@
 # Drawing Robot using LEGO Mindstorms EV3
 ## Initiation & Goal
+
 ![header](images/header.jpg)
+
 The development of this software was initiated and encouraged by the class Hardware-Praktikum (Internship) at the Leibniz Universität Hannover.
 The goal of this project was to assemble a robot using the normal and the extended packs of the LEGO Mindstorms EV3 with the aim to draw a caricature of a given person on a piece of paper. This includes moving on the paper and lifting/lowering the pen when needed.
 
@@ -18,7 +20,9 @@ The needed sensors and motors are:
 3. a Gyroscope sensor
 
 To create a perfect caricature, the pen needs to be placed exactly between the two axes of the tires. Our approach is as follows:
+
 ![Pen](images/pen.jpg)
+
 When the handler is moved down, the pen is lifted from the paper and when the handler moves up, the pen lands on the paper again.
 
 ## Placing the Robot
@@ -34,8 +38,12 @@ After compiling has finished, execute the code using `./main`.
 
 ##Installed Caricatures
 The default caricature which is available under main.c is a caricature of "Homer Simpson":
+
 ![Homer](images/homer.jpg)
+
 You can also choose between "Sonic", "Bugs bunny" and "Batman".
+
 ![Homer](images/sonic.jpg)
+
 In order to change the caricature, open `main.c` and comment out everything which has anything to do with homer. Uncomment the parts with your desired comic figure and compile/run again.
 You can also add your own caricature coordinates by preparing an array of coordinates which have no negative values and are integers.
