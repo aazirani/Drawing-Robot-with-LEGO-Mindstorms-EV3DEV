@@ -37,7 +37,7 @@ int main( void )
 	callback disp = display;
 	
 	printf( "Initializing the robot...\n" );
-	//check if the 
+	//check if the robot is connect properly
 	if ( !brick_init()) return ( 1 );
 	if ( ev3_init() < 1 ) return ( 1 );
 	if(init() && ev3_sensor_init()){

@@ -164,7 +164,9 @@ int rotateDegree(direction_type direction, int degree){
 			//4 different rotation speeds in order to be accurate and fast at the same time. If the target degree is farther away, the rotation is faster.
 			//printf("tempDegree: %d\n", tempDegree);
 			//printf("modLEFT: %d\n", mod((summedUpDegree-tempDegree), 360));
-			if( mod((summedUpDegree-tempDegree), 360) >= 60 ){
+			if( mod((summedUpDegree-tempDegree), 360) >= 90 ){
+				rotate(LEFT, 800);
+			} else if( mod((summedUpDegree-tempDegree), 360) >= 60 ){
 				rotate(LEFT, 650);
 			} else if( mod((summedUpDegree-tempDegree), 360) >= 35 ){
 				rotate(LEFT, 400);
@@ -200,7 +202,9 @@ int rotateDegree(direction_type direction, int degree){
 			//4 different rotation speeds in order to be accurate and fast at the same time. If the target degree is farther away, the rotation is faster.
 			//printf("tempDegree: %d\n", tempDegree);
 			//printf("modRIGHT: %d\n", mod((tempDegree-differenceDegree), 360));
-			if( mod((tempDegree-differenceDegree), 360) >= 60 ){
+			if( mod((tempDegree-differenceDegree), 360) >= 90 ){
+				rotate(RIGHT, 800);
+			} else if( mod((tempDegree-differenceDegree), 360) >= 60 ){
 				rotate(RIGHT, 650);
 			} else if( mod((tempDegree-differenceDegree), 360) >= 35 ){
 				rotate(RIGHT, 400);
