@@ -36,7 +36,7 @@ Navigate to the folder and compile "main.c" using the following command:
 
 After compiling has finished, execute the code using `./main`.
 
-##Installed Caricatures
+## Installed Caricatures
 The default caricature which is available under main.c is a caricature of "Homer Simpson":
 
 ![Homer](images/homer.jpg)
